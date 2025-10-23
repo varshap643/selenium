@@ -21,6 +21,19 @@ pipeline {
                     //bat 'pytest tests\\test_registrationapp.py --maxfail=1 --disable-warnings --tb=short'
                     //bat 'pytest -v'
                     // 4️⃣ Run Selenium tests (headless Chrome configured in test file)
+                     // Wait until Flask server responds
+                    bat '''
+                    echo Waiting for Flask server to start...
+                    for /L %%i in (1,1,30) do (
+                        powershell -Command "(Invoke-WebRequest -Uri http://127.0.0.1:5000 -UseBasicParsing).StatusCode" >nul 2>&1
+                        if %errorlevel%==0 (
+                            echo Flask server is up!
+                            goto :continue
+                        )
+                        timeout /t 2 >nul
+                    )
+                    :continue
+                    '''
                     bat 'pytest -v --disable-warnings --maxfail=1'
                     bat 'taskkill /IM python.exe /F'
             }
