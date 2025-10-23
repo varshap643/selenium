@@ -12,14 +12,15 @@ pipeline {
 
                     // ✅ Start Flask app in background
                     //bat 'start /B python app.py'
-                    bat 'Start-Process python app.py'
+                    bat 'start "" python app.py > flask_log.txt 2>&1'
 
                     // ⏱️ Wait a few seconds for the server to start
-                    bat 'Start-Sleep -Seconds 10'
+                    bat 'ping 127.0.0.1 -n 10 >nul'
 
                     // ✅ Run tests using pytest
                     //bat 'pytest tests\\test_registrationapp.py --maxfail=1 --disable-warnings --tb=short'
                     bat 'pytest -v'
+                    bat 'taskkill /IM python.exe /F'
             }
         }
 
