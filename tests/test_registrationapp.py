@@ -3,13 +3,24 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 # Fixture for setting up and tearing down the driver
 @pytest.fixture
 def setup_teardown():
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")              # Run in headless mode (no GUI)
+    chrome_options.add_argument("--no-sandbox")            # Bypass OS security model (required in CI)
+    chrome_options.add_argument("--disable-dev-shm-usage") # Prevent resource issues in containers
+    chrome_options.add_argument("--disable-gpu")           # Optional: avoids GPU-related errors
+    chrome_options.add_argument("--window-size=1920,1080") # Set browser window size for consistency
+
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=chrome_options
+    )
     yield driver
     driver.quit()
 

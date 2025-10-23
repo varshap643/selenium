@@ -19,7 +19,9 @@ pipeline {
 
                     // ✅ Run tests using pytest
                     //bat 'pytest tests\\test_registrationapp.py --maxfail=1 --disable-warnings --tb=short'
-                    bat 'pytest -v'
+                    //bat 'pytest -v'
+                    // 4️⃣ Run Selenium tests (headless Chrome configured in test file)
+                    bat 'pytest -v --disable-warnings --maxfail=1'
                     bat 'taskkill /IM python.exe /F'
             }
         }
