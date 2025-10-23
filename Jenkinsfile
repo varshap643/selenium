@@ -11,7 +11,8 @@ pipeline {
                     bat 'pip install -r requirements.txt'
 
                     // ✅ Start Flask app in background
-                    bat 'start /B python app.py'
+                    //bat 'start /B python app.py'
+                    bat 'start /MIN cmd /c "python app.py"'
 
                     // ⏱️ Wait a few seconds for the server to start
                     bat 'ping 127.0.0.1 -n 5 > nul'
@@ -36,9 +37,9 @@ pipeline {
         stage('push Docker Image to Docker Hub') {
             steps {
                 echo "push Docker Image to Docker Hub"
-                bat "docker tag seleniumdemoapp:v1 bhavani765/sample:seleniumtestimage"               
+                bat "docker tag seleniumdemoapp:v1 varshap25/sample:seleniumtestimage"               
                     
-                bat "docker push bhavani765/sample:seleniumtestimage"
+                bat "docker push varshap25/sample:seleniumtestimage"
                 
             }
         }
